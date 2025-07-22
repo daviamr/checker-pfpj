@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AtSign, CircleCheck, CircleX, Plus, RectangleEllipsis } from "lucide-react"
+import { AtSign, CircleCheck, CircleX, Plus, RectangleEllipsis, User } from "lucide-react"
 
 export function CreateUser() {
   return (
@@ -30,8 +30,12 @@ export function CreateUser() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-3">
+              <Label htmlFor="name"><User size={16} />Nome</Label>
+              <Input id="name" name="name" type="text" placeholder="Fulano de Tal" />
+            </div>
+            <div className="grid gap-3">
               <Label htmlFor="email"><AtSign size={16} />E-mail</Label>
-              <Input id="email" name="email" placeholder="email@exemplo.com" />
+              <Input id="email" name="email" type="email" placeholder="email@exemplo.com" />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="pass"><RectangleEllipsis size={16} />Senha</Label>

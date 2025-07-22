@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Check, ChevronsLeft, ChevronsRight, Download, Edit, Loader, Orbit, Search, Trash } from "lucide-react"
+import { Check, ChevronsLeft, ChevronsRight, Copy, Download, Edit, Loader, Orbit, Search, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -44,16 +44,22 @@ const data: Payment[] = [
     id: "m5gr84i9",
     numero: "+55 (21) 988776-65544",
     operadora: "Claro",
+    pfpj: "PF",
+    dataHoraConsulta: '25/10/2398, 18:09h'
   },
   {
     id: "m5gr84i10",
     numero: "+55 (21) 988776-65544",
     operadora: "Tim",
+    pfpj: "91.081.895/0001-91",
+    dataHoraConsulta: '12/12/3498, 13:39h'
   },
   {
     id: "m5gr84i11",
     numero: "+55 (21) 988776-65544",
     operadora: "Vivo",
+    pfpj: "82.332.230/0001-12",
+    dataHoraConsulta: '01/07/9888, 12:18h'
   }
 ]
 
@@ -61,6 +67,8 @@ export type Payment = {
   id: string
   numero: string
   operadora: string
+  pfpj: string
+  dataHoraConsulta: string
 }
 
 export function TesteTable() {
@@ -73,7 +81,24 @@ export function TesteTable() {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
   const [hasSelectedRows, setHasSelectedRows] = React.useState(false)
   const [showField, setShowField] = React.useState<string>('Todos')
-  console.log(showField)
+  const copyFormattedData = async (rowData: Payment) => {
+    const formattedText = `Número: ${rowData.numero} | Operadora: ${rowData.operadora} | PF/PJ: ${rowData.pfpj} | Data de Consulta: ${rowData.dataHoraConsulta}`;
+
+    try {
+      await navigator.clipboard.writeText(formattedText);
+      // Aqui você pode adicionar uma notificação de sucesso se quiser
+      console.log('Dados copiados com sucesso!');
+    } catch (err) {
+      console.error('Erro ao copiar dados:', err);
+      // Fallback para navegadores mais antigos
+      const textArea = document.createElement('textarea');
+      textArea.value = formattedText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+  };
 
   const filteredData = React.useMemo(() => {
     if (showField === 'Todos') {
@@ -111,7 +136,7 @@ export function TesteTable() {
         return (
           <div>
             {isSelected ? (
-              <Input type="number" className="w-40"/>
+              <Input type="number" className="w-40" />
             ) : (
               <p>{row.getValue("numero")}</p>
             )}
@@ -120,16 +145,34 @@ export function TesteTable() {
       },
       size: 180,
     },
-        {
+    {
       accessorKey: "operadora",
       header: "Operadora",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("operadora")}</div>),
+    },
+    {
+      accessorKey: "pfpj",
+      header: "PF/PJ",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("pfpj")}</div>),
+    },
+    {
+      accessorKey: "dataHoraConsulta",
+      header: "Data Consulta",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
     },
     {
       accessorKey: "utils",
       header: "",
       cell: ({ row }) => (<div className="capitalize flex justify-end gap-2">
         { }
+        <TooltipPadrao message="Copiar dados">
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => copyFormattedData(row.original)}>
+            <Copy />
+            {row.getValue("select")}</Button>
+        </TooltipPadrao>
         {row.getIsSelected() && (
           <Button
             variant={"outline"}
@@ -229,7 +272,7 @@ export function TesteTable() {
         </div>
       </div>
       <div className="rounded-md border relative">
-        <div className="absolute right-2 top-[6px] z-10">
+        <div className="absolute right-2 top-[2px] z-10">
           <Select value={maxRows.toString()} onValueChange={(value) => setMaxRows(Number(value))}>
             <SelectTrigger className="font-bold">{maxRows}</SelectTrigger>
             <SelectContent>

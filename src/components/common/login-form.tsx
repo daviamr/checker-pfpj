@@ -31,7 +31,7 @@ export function LoginForm() {
 
   return (
     <form
-      className="flex flex-col gap-6 max-w-80"
+      className="flex flex-col gap-6 max-w-80 w-full"
       onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col items-center gap-6 text-center w-full">
         <img
