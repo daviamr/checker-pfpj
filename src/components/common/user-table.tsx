@@ -1,4 +1,4 @@
-import { AtSign, Calendar, Edit, Eye, Trash, User } from "lucide-react"
+import { AtSign, Calendar, Eye, Loader, Trash, User } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -8,7 +8,8 @@ import {
   TableRow,
 } from "../ui/table"
 import { Button } from "../ui/button"
-import { CreateUser } from "../create-user"
+import { CreateEditUser } from "../create-edit-user"
+import { useUserController } from "@/pages/User/controller"
 
 export function UserTable() {
   const tableHeaders = [
@@ -17,11 +18,12 @@ export function UserTable() {
     { label: 'Criação', icon: <Calendar size={16} /> },
     { label: '', icon: null }
   ]
+  const { usersQuery: { isLoading, data }, deleteUser } = useUserController()
 
   return (
     <div>
       <div className="flex justify-end pb-2">
-        <CreateUser/>
+        <CreateEditUser mode="create"/>
       </div>
       <Table>
         <TableHeader>
@@ -36,20 +38,21 @@ export function UserTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Array(3).fill(null).map((_, i) => (
+          {data?.users.map((user, i) => (
             <TableRow key={i}>
-              <TableCell>Fulano</TableCell>
-              <TableCell>sicrano@beltrano.com</TableCell>
-              <TableCell>24/12/20, 14:30h</TableCell>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.createdAt}</TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button size={"icon"} variant={"outline"}><Eye size={16} /></Button>
-                <Button size={"icon"} variant={"outline"}><Edit size={16} /></Button>
-                <Button size={"icon"} variant={"outline"}><Trash size={16} /></Button>
+                <CreateEditUser id={String(user.id)} email={user.email} name={user.name} mode="edit"/>
+                <Button size={"icon"} variant={"outline"} onClick={() => deleteUser(String(user.id))}><Trash size={16} /></Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {isLoading && (<div className="w-full flex justify-center items-center py-32"><span className="animate-spin"><Loader size={32} /></span></div>)}
     </div>
   )
 }

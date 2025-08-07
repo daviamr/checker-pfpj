@@ -11,17 +11,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [token, setToken] = useState<string | null>(null);
 
-  // Verificar se há um token salvo ao inicializar
   useEffect(() => {
-    const savedToken = localStorage.getItem('authToken');
-    const savedUser = localStorage.getItem('userData');
+    const savedToken = localStorage.getItem('@bearer');
     
-    if (savedToken && savedUser) {
+    if (savedToken) {
       try {
         setToken(savedToken);
-        setUser(JSON.parse(savedUser) as User);
       } catch (error) {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('@bearer');
         localStorage.removeItem('userData');
         console.error('Erro ao carregar dados do usuário:', error);
       }

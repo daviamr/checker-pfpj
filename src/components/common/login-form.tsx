@@ -1,4 +1,4 @@
-import { Eye, EyeClosed } from "lucide-react"
+import { Eye, EyeClosed, Loader } from "lucide-react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
@@ -6,16 +6,19 @@ import { useState } from "react"
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AuthService } from "@/services/AuthService"
+import { toast } from 'react-toastify';
 
 const loginUserSchema = z.object({
   email: z.string().email('Endereço de e-mail inválido.'),
-  password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres.')
+  password: z.string().min(4, 'A senha deve ter no mínimo 6 caracteres.')
 })
 
 type LoginUserData = z.infer<typeof loginUserSchema>
 
 export function LoginForm() {
   const [viewPassword, setViewPassword] = useState("password")
+  const authService = new AuthService()
   const {
     register,
     handleSubmit,
@@ -24,11 +27,27 @@ export function LoginForm() {
   } = useForm<LoginUserData>({
     resolver: zodResolver(loginUserSchema)
   })
+  const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = (data: LoginUserData) => {
+  const onSubmit = async (data: LoginUserData) => {
+    setIsLoading(true)
+    try {
+      const userData = await authService.login(data)
+      if (!userData.success) toast.error('teste')
+
+      toast.success('Autenticado com sucesso.')
+      setTimeout(() => {
+        setIsLoading(false)
+        return window.location.reload()
+      }, 1500)
+    } catch (error) {
+      toast.error(`${error}`)
+      console.log('Erro ao autenticar', error)
+    }
     return reset(data)
   }
 
+  if (isLoading) return <span className="animate-spin"><Loader size={32} /></span>
   return (
     <form
       className="flex flex-col gap-6 max-w-80 w-full"
@@ -49,9 +68,7 @@ export function LoginForm() {
           <div className="flex items-center gap-2">
             <Label htmlFor="email">E-mail</Label>
 
-            {errors.email && (
-              <span>erro {errors.email.message}</span>
-            )}
+            {errors.email && (<span>erro {errors.email.message}</span>)}
           </div>
 
           <Input
@@ -66,9 +83,7 @@ export function LoginForm() {
           <div className="flex items-center gap-2">
             <Label htmlFor="password">Senha</Label>
 
-            {errors.password && (
-              <span>erro {errors.password.message}</span>
-            )}
+            {errors.password && (<span>erro {errors.password.message}</span>)}
           </div>
 
           <div className="flex items-center gap-1">

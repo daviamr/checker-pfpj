@@ -1,8 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: process.env.URL_API,
-  headers: {
-    "Content-Type": 'application/json'
-  }
+  baseURL: 'https://webscrap.bigdates.com.br:3670',
+  headers: { "Content-Type": 'application/json' }
 })

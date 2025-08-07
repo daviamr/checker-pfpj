@@ -1,9 +1,10 @@
 export interface ILogin {
-  user: string,
-  pass: string
+  email: string,
+  password: string
 }
 
 export interface ILoginResponse {
+  success: boolean,
   token: string,
   user: {
     name: string

@@ -139,3 +139,47 @@ Retorna: {
   message: "API de Consulta de Operadora está funcionando!" 
 }
 Header: Nenhum
+
+
+DOCUMENTAÇÃO DAS ROTAS:
+
+1. POST /login
+   - Recebe: { email, password }
+   - Retorna: { success: true, token, user: { id, name, email, tel, datanascimento, uf, cidade, genero, nickname, image, churn, actived } }
+
+2. POST /register (protegida)
+   - Recebe: { name, email, password, tel, datanascimento, uf, cidade, genero, nickname, image, churn }
+   - Retorna: { success: true, message, user: { id, name, email, tel, datanascimento, uf, cidade, genero, nickname, image, churn, actived } }
+
+3. GET /users (protegida)
+   - Recebe: Nenhum parâmetro
+   - Retorna: { success: true, users: [array de usuários com senhas mascaradas] }
+
+4. GET /users/search?query=termo (protegida)
+   - Recebe: query (parâmetro de busca por nome ou email)
+   - Retorna: { success: true, users: [array de usuários encontrados com senhas mascaradas] }
+
+5. PUT /users/:id (protegida)
+   - Recebe: { name, email, password, newPassword, confirmPassword, tel, datanascimento, uf, cidade, genero, nickname, image, churn }
+   - Retorna: { success: true, message, user: { id, name, email, tel, datanascimento, uf, cidade, genero, nickname, image, churn, actived } }
+
+6. DELETE /users/:id (protegida)
+   - Recebe: id (parâmetro da URL)
+   - Retorna: { success: true, message }
+
+Todas as rotas protegidas requerem o header: Authorization: Bearer <token>
+
+CAMPOS DO MODELO:
+- id: INTEGER (auto increment, primary key)
+- name: STRING(255) - Nome do usuário
+- email: STRING(255) - Email único do usuário
+- password: STRING(255) - Senha do usuário
+- tel: STRING(255) - Telefone do usuário
+- actived: BOOLEAN - Status de ativação (default: true)
+- datanascimento: DATE - Data de nascimento
+- uf: STRING(45) - Estado
+- cidade: STRING(45) - Cidade
+- genero: STRING(45) - Gênero
+- nickname: STRING(45) - Apelido
+- image: STRING(100) - URL da imagem do usuário
+- churn: BOOLEAN - Status de churn (default: false)
