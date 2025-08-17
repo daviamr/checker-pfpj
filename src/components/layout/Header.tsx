@@ -22,6 +22,10 @@ export function Header() {
                 Checker
               </li>
 
+              <li className={`cursor-pointer ${view === 'historicpage' && 'font-bold'}`} onClick={() => changeView('historicpage')}>
+                Histórico
+              </li>
+
             </ul>
           </nav>
 

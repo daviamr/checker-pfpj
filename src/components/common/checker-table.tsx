@@ -46,6 +46,7 @@ const data: Payment[] = [
     numero: "+55 (21) 988776-65544",
     operadora: "Claro",
     pfpj: "PF",
+    documento: "123.456.789-00",
     dataHoraConsulta: '25/10/2398, 18:09h'
   },
   {
@@ -53,6 +54,7 @@ const data: Payment[] = [
     numero: "+55 (21) 988776-65544",
     operadora: "Tim",
     pfpj: "91.081.895/0001-91",
+    documento: "123.456.789-00",
     dataHoraConsulta: '12/12/3498, 13:39h'
   },
   {
@@ -60,6 +62,7 @@ const data: Payment[] = [
     numero: "+55 (21) 988776-65544",
     operadora: "Vivo",
     pfpj: "82.332.230/0001-12",
+    documento: "123.456.789-00",
     dataHoraConsulta: '01/07/9888, 12:18h'
   }
 ]
@@ -69,6 +72,7 @@ export type Payment = {
   numero: string
   operadora: string
   pfpj: string
+  documento: string
   dataHoraConsulta: string
 }
 
@@ -158,6 +162,11 @@ export function CheckerTable() {
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pfpj")}</div>),
     },
     {
+      accessorKey: "documento",
+      header: "Documento",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("documento")}</div>),
+    },
+    {
       accessorKey: "dataHoraConsulta",
       header: "Data Consulta",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
@@ -175,7 +184,7 @@ export function CheckerTable() {
             <Copy />
             {row.getValue("select")}</Button>
         </TooltipPadrao>
-        {row.getIsSelected() && (
+        {/* {row.getIsSelected() && (
           <Button
             variant={"outline"}
             size={"icon"}
@@ -189,7 +198,7 @@ export function CheckerTable() {
           onClick={() => row.toggleSelected()}>
           <Edit />
           {row.getValue("select")}</Button>
-        <Button variant={"outline"} size={"icon"}><Trash />{row.getValue("select")}</Button>
+        <Button variant={"outline"} size={"icon"}><Trash />{row.getValue("select")}</Button> */}
       </div>
       ),
       size: 180,
