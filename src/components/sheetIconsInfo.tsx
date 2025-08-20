@@ -1,4 +1,4 @@
-import { CircleCheck, CircleX } from "lucide-react"
+import { Building2, CircleCheck, CircleX, PersonStanding } from "lucide-react"
 import { TooltipPadrao } from "./tooltip"
 
 type SheetInfoProps = {
@@ -22,7 +22,7 @@ export function SheetInfo({ ...prop }: SheetInfoProps) {
           <CircleX size={16} color="red" />{prop.error}
         </span>
       </TooltipPadrao>
-      {/* <span className="border-r-2 select-none h-6"></span>
+      <span className="border-r-2 select-none h-6"></span>
       <div className="flex items-center gap-4 rounded-lg">
         <TooltipPadrao message={`PF - Pessoa Física`}>
           <span className="flex items-center gap-2 font-semibold">
@@ -34,12 +34,12 @@ export function SheetInfo({ ...prop }: SheetInfoProps) {
             <Building2 size={16} />{prop.pj}
           </span>
         </TooltipPadrao>
-        <TooltipPadrao message={`NI - Natureza jurídica não identificada`}>
+        {/* <TooltipPadrao message={`NI - Natureza jurídica não identificada`}>
           <span className="flex items-center gap-2 font-semibold">
             <span>?</span> {prop.unkpfpj}
           </span>
-        </TooltipPadrao>
-      </div> */}
+        </TooltipPadrao> */}
+      </div>
     </div>
   )
 }
