@@ -44,17 +44,28 @@ const data: Payment[] = [
     id: "m5gr84i9",
     nomeArquivo: "planilha-template-1.xlsx",
     dataUpload: "25/10/2023, 12:44h",
+    status: 'Processando',
+    totalLinhas: '938',
+    linhasProcessadas: '877',
+    linhasComErro: '61',
   },
   {
     id: "m5gr84i10",
     nomeArquivo: "planilha-template-3.xlsx",
     dataUpload: "19/08/2024, 08:21h",
-
+    status: 'Finalizado',
+    totalLinhas: '456',
+    linhasProcessadas: '355',
+    linhasComErro: '101',
   },
   {
     id: "m5gr84i11",
     nomeArquivo: "planilha-template-3.xlsx",
     dataUpload: "20/08/2025, 14:53h",
+    status: 'Finalizado',
+    totalLinhas: '1983',
+    linhasProcessadas: '1377',
+    linhasComErro: '606',
   }
 ]
 
@@ -62,6 +73,10 @@ export type Payment = {
   id: string
   nomeArquivo: string
   dataUpload: string
+  status: string
+  totalLinhas: string
+  linhasProcessadas: string
+  linhasComErro: string
 }
 
 export function FileTable() {
@@ -123,6 +138,26 @@ export function FileTable() {
       accessorKey: "dataUpload",
       header: "Data Upload",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("dataUpload")}</div>),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("status")}</div>),
+    },
+    {
+      accessorKey: "totalLinhas",
+      header: "Total de Linhas",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("totalLinhas")}</div>),
+    },
+    {
+      accessorKey: "linhasProcessadas",
+      header: "Linhas Processadas",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasProcessadas")}</div>),
+    },
+    {
+      accessorKey: "linhasComErro",
+      header: "Linhas com Erro",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasComErro")}</div>),
     },
     {
       accessorKey: "utils",
