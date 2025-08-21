@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { ChevronsLeft, ChevronsRight, Copy, Download, Loader, Orbit, Search, Trash } from "lucide-react"
+import { ChevronsLeft, ChevronsRight, Copy, Download, Eye, Loader, Orbit, Search, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -47,7 +47,8 @@ const data: Payment[] = [
     operadora: "Claro",
     pfpj: "PF",
     documento: "123.456.789-00",
-    dataHoraConsulta: '25/10/2398, 18:09h'
+    dataHoraConsulta: '25/10/2398, 18:09h',
+    razaoSocial: 'N/I'
   },
   {
     id: "m5gr84i10",
@@ -55,7 +56,8 @@ const data: Payment[] = [
     operadora: "Tim",
     pfpj: "91.081.895/0001-91",
     documento: "123.456.789-00",
-    dataHoraConsulta: '12/12/3498, 13:39h'
+    dataHoraConsulta: '12/12/3498, 13:39h',
+    razaoSocial: 'Empresa LTDA'
   },
   {
     id: "m5gr84i11",
@@ -63,7 +65,8 @@ const data: Payment[] = [
     operadora: "Vivo",
     pfpj: "82.332.230/0001-12",
     documento: "123.456.789-00",
-    dataHoraConsulta: '01/07/9888, 12:18h'
+    dataHoraConsulta: '01/07/9888, 12:18h',
+    razaoSocial: 'Empresa LTDA'
   }
 ]
 
@@ -74,6 +77,7 @@ export type Payment = {
   pfpj: string
   documento: string
   dataHoraConsulta: string
+  razaoSocial: string
 }
 
 export function CheckerTable() {
@@ -167,6 +171,11 @@ export function CheckerTable() {
       cell: ({ row }) => (<div className="capitalize">{row.getValue("documento")}</div>),
     },
     {
+      accessorKey: "razaoSocial",
+      header: "Razão Social",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("razaoSocial")}</div>),
+    },
+    {
       accessorKey: "dataHoraConsulta",
       header: "Data Consulta",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
@@ -176,6 +185,13 @@ export function CheckerTable() {
       header: "",
       cell: ({ row }) => (<div className="capitalize flex justify-end gap-2">
         { }
+        <TooltipPadrao message="Ver informações">
+          <Button
+            variant={"outline"}
+            size={"icon"}>
+            <Eye />
+            {row.getValue("select")}</Button>
+        </TooltipPadrao>
         <TooltipPadrao message="Copiar dados">
           <Button
             variant={"outline"}
@@ -184,6 +200,7 @@ export function CheckerTable() {
             <Copy />
             {row.getValue("select")}</Button>
         </TooltipPadrao>
+
         {/* {row.getIsSelected() && (
           <Button
             variant={"outline"}

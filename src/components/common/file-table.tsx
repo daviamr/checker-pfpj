@@ -48,6 +48,8 @@ const data: Payment[] = [
     totalLinhas: '938',
     linhasProcessadas: '877',
     linhasComErro: '61',
+    pf: '594',
+    pj: '231',
   },
   {
     id: "m5gr84i10",
@@ -57,6 +59,8 @@ const data: Payment[] = [
     totalLinhas: '456',
     linhasProcessadas: '355',
     linhasComErro: '101',
+    pf: '200',
+    pj: '58',
   },
   {
     id: "m5gr84i11",
@@ -66,6 +70,8 @@ const data: Payment[] = [
     totalLinhas: '1983',
     linhasProcessadas: '1377',
     linhasComErro: '606',
+    pf: '100',
+    pj: '983',
   }
 ]
 
@@ -77,6 +83,8 @@ export type Payment = {
   totalLinhas: string
   linhasProcessadas: string
   linhasComErro: string
+  pf: string
+  pj: string
 }
 
 export function FileTable() {
@@ -158,6 +166,16 @@ export function FileTable() {
       accessorKey: "linhasComErro",
       header: "Linhas com Erro",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasComErro")}</div>),
+    },
+    {
+      accessorKey: "pf",
+      header: "PF",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("pf")}</div>),
+    },
+    {
+      accessorKey: "pj",
+      header: "PJ",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
     },
     {
       accessorKey: "utils",
