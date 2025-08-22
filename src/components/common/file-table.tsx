@@ -38,6 +38,7 @@ import { UploadSheet } from "../upload-sheet"
 import { TooltipPadrao } from "../tooltip"
 import { useSheetController } from "@/pages/Checker/sheet-controller"
 import { CheckerTable } from "./checker-table"
+import { useViewSheet } from "@/contexts/sheet-context"
 
 const data: Payment[] = [
   {
@@ -95,27 +96,9 @@ export function FileTable() {
   const [maxRows, setMaxRows] = React.useState(50)
   const [isLoading, setIsLoading] = React.useState(false)
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
-  const [selectedFile, setSelectedFile] = React.useState<{}>()
-  const [showCheckerTable, setShowCheckerTable] = React.useState(false)
   const [hasSelectedRows, setHasSelectedRows] = React.useState(false)
   const { exportDefaultSheet } = useSheetController()
-
-  React.useEffect(() => {
-    if (selectedFile) {
-      setIsLoading(true)
-      setShowCheckerTable(false)
-
-      const timer = setTimeout(() => {
-        setIsLoading(false)
-        setShowCheckerTable(true)
-      }, 1500)
-
-      return () => clearTimeout(timer)
-    } else {
-      setShowCheckerTable(false)
-      setIsLoading(false)
-    }
-  }, [selectedFile])
+  const { changeViewSheet, viewSheet } = useViewSheet()
 
   const columns: ColumnDef<Payment>[] = [
     {
@@ -186,15 +169,22 @@ export function FileTable() {
           <Button
             variant={"outline"}
             size={"icon"}
-            onClick={() => setSelectedFile(row.original.id)}>
+            onClick={() => changeViewSheet(row.original.nomeArquivo)}>
             <Eye />
             {row.getValue("select")}</Button>
         </TooltipPadrao>
         <TooltipPadrao message="Download">
           <Button
-            variant={"secondary"}
+            variant={"outline"}
             size={'icon'}
             onClick={exportDefaultSheet}><Download size={16} /></Button>
+        </TooltipPadrao>
+        <TooltipPadrao message="Download">
+          <Button
+            variant={"destructive"}
+            size={'icon'}
+            className="ml-2">
+            <Trash size={16} /></Button>
         </TooltipPadrao>
         {/* {row.getIsSelected() && (
           <Button
@@ -247,7 +237,7 @@ export function FileTable() {
     }, 1000)
   }, [maxRows, table]);
 
-  return !showCheckerTable ? (
+  return viewSheet === 'default' ? (
     <div className=" w-full">
       <div className="relative flex items-center py-4">
         <Search size={16} className="absolute left-2" />
