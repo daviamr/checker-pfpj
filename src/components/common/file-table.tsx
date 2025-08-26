@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { ChevronsLeft, ChevronsRight, Download, Eye, Loader, Search, Trash } from "lucide-react"
+import { CheckCircle, ChevronsLeft, ChevronsRight, CircleX, Download, Eye, Loader, Search, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -39,39 +39,43 @@ import { TooltipPadrao } from "../tooltip"
 import { useSheetController } from "@/pages/Checker/sheet-controller"
 import { CheckerTable } from "./checker-table"
 import { useViewSheet } from "@/contexts/sheet-context"
+import { ShareWorkSheet } from "../share"
 
 const data: Payment[] = [
   {
     id: "m5gr84i9",
     nomeArquivo: "planilha-template-1.xlsx",
     dataUpload: "25/10/2023, 12:44h",
-    status: 'Processando',
+    status: 'success',
     totalLinhas: '938',
     linhasProcessadas: '877',
     linhasComErro: '61',
     pf: '594',
+    ni: '188',
     pj: '231',
   },
   {
     id: "m5gr84i10",
     nomeArquivo: "planilha-template-3.xlsx",
     dataUpload: "19/08/2024, 08:21h",
-    status: 'Finalizado',
+    status: 'pending',
     totalLinhas: '456',
     linhasProcessadas: '355',
     linhasComErro: '101',
     pf: '200',
+    ni: '23',
     pj: '58',
   },
   {
     id: "m5gr84i11",
     nomeArquivo: "planilha-template-3.xlsx",
     dataUpload: "20/08/2025, 14:53h",
-    status: 'Finalizado',
+    status: 'error',
     totalLinhas: '1983',
     linhasProcessadas: '1377',
     linhasComErro: '606',
     pf: '100',
+    ni: '59',
     pj: '983',
   }
 ]
@@ -85,6 +89,7 @@ export type Payment = {
   linhasProcessadas: string
   linhasComErro: string
   pf: string
+  ni: string
   pj: string
 }
 
@@ -133,39 +138,55 @@ export function FileTable() {
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("status")}</div>),
+      cell: ({ row }) => (<div className="capitalize flex items-center gap-2">
+        {row.getValue("status") === 'success' && <span><TooltipPadrao message="Processado com sucesso"><CheckCircle size={16} className="text-green-500" /></TooltipPadrao></span>}
+        {row.getValue("status") === 'pending' && <span><TooltipPadrao message="Erro ao processar"><CircleX size={16} className="text-red-500" /></TooltipPadrao></span>}
+        {row.getValue("status") === 'error' && <span><TooltipPadrao message="Processando"><Loader size={16} className="animate-spin" /></TooltipPadrao></span>}
+      </div>),
+      size: 80,
     },
     {
       accessorKey: "totalLinhas",
-      header: "Total de Linhas",
+      header: "Total",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("totalLinhas")}</div>),
+      size: 80,
     },
     {
       accessorKey: "linhasProcessadas",
-      header: "Linhas Processadas",
+      header: "Processadas",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasProcessadas")}</div>),
+      size: 100,
     },
     {
       accessorKey: "linhasComErro",
-      header: "Linhas com Erro",
+      header: "Inválidas",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasComErro")}</div>),
+      size: 100,
     },
     {
       accessorKey: "pf",
       header: "PF",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pf")}</div>),
+      size: 80,
+    },
+    {
+      accessorKey: "ni",
+      header: "NI",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("ni")}</div>),
+      size: 80,
     },
     {
       accessorKey: "pj",
       header: "PJ",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
+      size: 80,
     },
     {
       accessorKey: "utils",
       header: "",
       cell: ({ row }) => (<div className="capitalize flex justify-end gap-2">
         { }
-        <TooltipPadrao message="Renderizar planilha">
+        <TooltipPadrao message="Visualizar resultado">
           <Button
             variant={"outline"}
             size={"icon"}
@@ -179,12 +200,14 @@ export function FileTable() {
             size={'icon'}
             onClick={exportDefaultSheet}><Download size={16} /></Button>
         </TooltipPadrao>
-        <TooltipPadrao message="Download">
+        <TooltipPadrao message="Excluir">
           <Button
-            variant={"destructive"}
-            size={'icon'}
-            className="ml-2">
+            variant={"outline"}
+            size={'icon'}>
             <Trash size={16} /></Button>
+        </TooltipPadrao>
+        <TooltipPadrao message="Compartilhar">
+          <ShareWorkSheet />
         </TooltipPadrao>
         {/* {row.getIsSelected() && (
           <Button
@@ -269,7 +292,7 @@ export function FileTable() {
       <div className="rounded-md border relative">
         <div className="absolute right-2 top-[2px] z-10">
           <Select value={maxRows.toString()} onValueChange={(value) => setMaxRows(Number(value))}>
-            <SelectTrigger className="font-bold">{maxRows}</SelectTrigger>
+            <SelectTrigger className="font-bold border-none">{maxRows}</SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectItem value='50'>50</SelectItem>

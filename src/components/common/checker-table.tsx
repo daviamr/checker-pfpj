@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { ChevronsLeft, ChevronsRight, Copy, Download, Eye, Loader, Orbit, Search, Trash } from "lucide-react"
+import { ChevronsLeft, ChevronsRight, Copy, Download, Eye, Filter, Loader, Search, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -32,13 +32,13 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select"
 import { UploadSheet } from "../upload-sheet"
 import { SheetInfo } from "../sheetIconsInfo"
 import { TooltipPadrao } from "../tooltip"
 import { useSheetController } from "@/pages/Checker/sheet-controller"
+import { Label } from "../ui/label"
 
 const data: Payment[] = [
   {
@@ -48,25 +48,37 @@ const data: Payment[] = [
     pfpj: "PF",
     documento: "123.456.789-00",
     dataHoraConsulta: '25/10/2398, 18:09h',
-    razaoSocial: 'N/I'
+    razaoSocial: 'N/I',
+    porte: 'EI',
+    cnae: '1234567890',
+    cidade: 'Mato Grosso',
+    uf: 'MT'
   },
   {
     id: "m5gr84i10",
     numero: "+55 (21) 988776-65544",
     operadora: "Tim",
-    pfpj: "91.081.895/0001-91",
-    documento: "123.456.789-00",
+    pfpj: "PJ",
+    documento: "91.081.895/0001-91",
     dataHoraConsulta: '12/12/3498, 13:39h',
-    razaoSocial: 'Empresa LTDA'
+    razaoSocial: 'Empresa MEI',
+    porte: 'MEI',
+    cnae: '1234567890',
+    cidade: 'Rio de Janeiro',
+    uf: 'RJ'
   },
   {
     id: "m5gr84i11",
     numero: "+55 (21) 988776-65544",
     operadora: "Vivo",
-    pfpj: "82.332.230/0001-12",
-    documento: "123.456.789-00",
+    pfpj: "PJ",
+    documento: "82.332.230/0001-12",
     dataHoraConsulta: '01/07/9888, 12:18h',
-    razaoSocial: 'Empresa LTDA'
+    razaoSocial: 'Empresa LTDA',
+    porte: 'LTDA',
+    cnae: '1234567890',
+    cidade: 'São Paulo',
+    uf: 'SP'
   }
 ]
 
@@ -78,6 +90,10 @@ export type Payment = {
   documento: string
   dataHoraConsulta: string
   razaoSocial: string
+  porte: string
+  cnae: string
+  cidade: string
+  uf: string
 }
 
 export function CheckerTable() {
@@ -89,7 +105,9 @@ export function CheckerTable() {
   const [isLoading, setIsLoading] = React.useState(false)
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
   const [hasSelectedRows, setHasSelectedRows] = React.useState(false)
-  const [showField, setShowField] = React.useState<string>('Todos')
+  // const [showField, setShowField] = React.useState<string>('Todos')
+  const [showFilter, setShowFilter] = React.useState<string[]>(['pfpj'])
+  const [showFilters, setShowFilters] = React.useState(false)
   const { exportDefaultSheet } = useSheetController()
   const copyFormattedData = async (rowData: Payment) => {
     const formattedText = `Número: ${rowData.numero} | Operadora: ${rowData.operadora} | PF/PJ: ${rowData.pfpj} | Data de Consulta: ${rowData.dataHoraConsulta}`
@@ -110,13 +128,13 @@ export function CheckerTable() {
     }
   };
 
-  const filteredData = React.useMemo(() => {
-    if (showField === 'Todos') {
-      return data
-    }
-    const filteredData = data.filter(item => item.operadora === showField)
-    return filteredData
-  }, [showField])
+  // const filteredData = React.useMemo(() => {
+  //   if (showField === 'Todos') {
+  //     return data
+  //   }
+  //   const filteredData = data.filter(item => item.operadora === showField)
+  //   return filteredData
+  // }, [showField])
 
   const columns: ColumnDef<Payment>[] = [
     {
@@ -159,11 +177,13 @@ export function CheckerTable() {
       accessorKey: "operadora",
       header: "Operadora",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("operadora")}</div>),
+      size: 100,
     },
     {
       accessorKey: "pfpj",
       header: "PF/PJ",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pfpj")}</div>),
+      size: 80,
     },
     {
       accessorKey: "documento",
@@ -179,6 +199,35 @@ export function CheckerTable() {
       accessorKey: "dataHoraConsulta",
       header: "Data Consulta",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
+    },
+    {
+      accessorKey: "porte",
+      header: "Porte",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("porte")}</div>),
+      size: 100,
+    },
+    {
+      accessorKey: "cnae",
+      header: "CNAE",
+      cell: ({ row }) => (
+        <>
+          <TooltipPadrao message="Atividade tal tal tal">
+            <div className="capitalize">{row.getValue("cnae")}</div>
+          </TooltipPadrao>
+        </>),
+      size: 100,
+    },
+    {
+      accessorKey: "cidade",
+      header: "Cidade",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("cidade")}</div>),
+      size: 120,
+    },
+    {
+      accessorKey: "uf",
+      header: "UF",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("uf")}</div>),
+      size: 40,
     },
     {
       accessorKey: "utils",
@@ -223,7 +272,7 @@ export function CheckerTable() {
   ]
 
   const table = useReactTable({
-    data: filteredData,
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -252,34 +301,32 @@ export function CheckerTable() {
     }, 1000)
   }, [maxRows, table]);
 
+  console.log(showFilter)
+
   return (
-    <div className=" w-full">
+    <div className="relative w-full">
       <div className="relative flex items-center py-4">
         <Search size={16} className="absolute left-2" />
         <div className="flex items-center gap-4 w-full">
           <Input
-            placeholder="Filtrar por palavra"
+            placeholder="Filtrar por PF/PJ"
             value={(table.getColumn("pfpj")?.getFilterValue() as string) ?? ""}
             onChange={(event) => table.getColumn("pfpj")?.setFilterValue(event.target.value)}
-            className="pl-8 min-w-40" />
+            className="pl-8" />
 
-          <Select value={showField} onValueChange={setShowField}>
-            <SelectTrigger className="font-bold w-40">
-              <Orbit size={16} />
-              {showField}
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Filtrar por operadora</SelectLabel>
-                <SelectItem value='Todos'>Todos</SelectItem>
-                <SelectItem value='Tim'>Tim</SelectItem>
-                <SelectItem value='Vivo'>Vivo</SelectItem>
-                <SelectItem value='Claro'>Claro</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          {showFilter.includes('documento') && (
+            <Input
+              placeholder="Filtrar por Documento"
+              value={(table.getColumn("documento")?.getFilterValue() as string) ?? ""}
+              onChange={(event) => table.getColumn("documento")?.setFilterValue(event.target.value)}
+              />
+          )}
 
-          <SheetInfo success={92} error={10} pf={10} pj={22} unkpfpj={13} />
+          <Button variant={"outline"} size={"icon"} onClick={() => setShowFilters(prev => !prev)}>
+            <Filter size={16} />
+          </Button>
+
+          <SheetInfo total={102} success={92} error={10} pf={10} pj={22} unkpfpj={13} />
         </div>
 
         <div className="flex w-full justify-end">
@@ -302,7 +349,7 @@ export function CheckerTable() {
       <div className="rounded-md border relative">
         <div className="absolute right-2 top-[2px] z-10">
           <Select value={maxRows.toString()} onValueChange={(value) => setMaxRows(Number(value))}>
-            <SelectTrigger className="font-bold">{maxRows}</SelectTrigger>
+            <SelectTrigger className="font-bold border-none">{maxRows}</SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectItem value='50'>50</SelectItem>
@@ -401,6 +448,40 @@ export function CheckerTable() {
           </Button>
         </div>
       </div>
+      {
+        showFilters && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-black/30 z-50"
+            onClick={() => setShowFilters(false)}
+          >
+            <div
+              className="bg-background p-6 rounded-lg shadow-lg w-100"
+              onClick={(e) => e.stopPropagation()}
+              >
+              <p className="text-2xl pb-4 border-b">Selecione os filtros</p>
+              <div className="flex items-center gap-2 text-white py-4">
+                <Input
+                  type="checkbox"
+                  className="max-w-4 h-4 w-4"
+                  id="documento"
+                  checked={showFilter.includes('documento')}
+                  onChange={(e) => {
+                    const value = 'documento';
+                    if (e.target.checked) {
+                      setShowFilter(prev => [...prev, value]);
+                    } else {
+                      setShowFilter(prev => prev.filter(item => item !== value));
+                    }
+                  }}
+                />
+                <Label htmlFor="documento" className="text-white cursor-pointer">
+                  Documento
+                </Label>
+              </div>
+            </div>
+          </div>
+        )
+      }
     </div>
   )
 }

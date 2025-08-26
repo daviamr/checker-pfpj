@@ -14,16 +14,115 @@ export function Header() {
           <nav>
             <ul className="flex gap-4">
 
-              <li className={`cursor-pointer ${view === 'userpage' && 'font-bold'}`} onClick={() => changeView('userpage')}>
-                Usuários
+              <li>
+                <button
+                  onClick={() => changeView('userpage')}
+                  type="button"
+                  className="group flex items-center gap-4 [perspective:1000px] cursor-pointer"
+                >
+                  <span className={`
+                  relative inline-block
+                  transition-transform duration-150 
+                  [transform-style:preserve-3d] [transform-origin:center_top]
+                  group-hover:[transform:rotateX(90deg)_translateY(-22px)]
+                  ${view === 'userpage'
+                      ? "text-primary"
+                      : "text-zinc-700 dark:text-white"
+                    }
+                `}>
+                    Usuários
+                    <span
+                      className={`
+                    absolute top-full left-0 w-full h-full text-center 
+                    transition-colors duration-150 
+                    [transform:rotateX(-90deg)] [transform-origin:center_top] 
+                    content-[attr(data-hover)]
+                    ${view === 'userpage'
+                          ? "text-primary"
+                          : "text-zinc-700 dark:text-white"
+                        }
+                    group-hover:text-primary  group-hover:dark:text-primary
+                  `}
+                      aria-hidden="true"
+                    >
+                      Usuários
+                    </span>
+                  </span>
+                </button>
               </li>
 
-              <li className={`cursor-pointer ${view === 'checkerpage' && 'font-bold'}`} onClick={() => changeView('checkerpage')}>
-                Checker
+              <li>
+                <button
+                  onClick={() => changeView('checkerpage')}
+                  type="button"
+                  className="group flex items-center gap-4 [perspective:1000px] cursor-pointer"
+                >
+                  <span className={`
+                  relative inline-block
+                  transition-transform duration-150 
+                  [transform-style:preserve-3d] [transform-origin:center_top]
+                  group-hover:[transform:rotateX(90deg)_translateY(-22px)]
+                  ${view === 'checkerpage'
+                      ? "text-primary"
+                      : "text-zinc-700 dark:text-white"
+                    }
+                `}>
+                    Checker
+                    <span
+                      className={`
+                    absolute top-full left-0 w-full h-full text-center 
+                    transition-colors duration-150 
+                    [transform:rotateX(-90deg)] [transform-origin:center_top] 
+                    content-[attr(data-hover)]
+                    ${view === 'checkerpage'
+                          ? "text-primary"
+                          : "text-zinc-700 dark:text-white"
+                        }
+                    group-hover:text-primary  group-hover:dark:text-primary
+                  `}
+                      aria-hidden="true"
+                    >
+                      Checker
+                    </span>
+                  </span>
+                </button>
               </li>
 
-              <li className={`cursor-pointer ${view === 'historicpage' && 'font-bold'}`} onClick={() => changeView('historicpage')}>
-                Histórico
+              <li>
+                <button
+                  onClick={() => changeView('historicpage')}
+                  type="button"
+                  className="group flex items-center gap-4 [perspective:1000px] cursor-pointer"
+                >
+                  <span className={`
+                  relative inline-block
+                  transition-transform duration-150 
+                  [transform-style:preserve-3d] [transform-origin:center_top]
+                  group-hover:[transform:rotateX(90deg)_translateY(-22px)]
+                  ${view === 'historicpage'
+                      ? "text-primary"
+                      : "text-zinc-700 dark:text-white"
+                    }
+                `}>
+                    Histórico
+                    <span
+                      className={`
+                    absolute top-full left-0 w-full h-full text-center 
+                    transition-colors duration-150 
+                    [transform:rotateX(-90deg)] [transform-origin:center_top] 
+                    content-[attr(data-hover)]
+                    ${view === 'historicpage'
+                          ? "text-primary"
+                          : "text-zinc-700 dark:text-white"
+                        }
+                    group-hover:text-primary  group-hover:dark:text-primary
+                  `}
+                      aria-hidden="true"
+                    >
+                      Histórico
+                    </span>
+                  </span>
+                </button>
               </li>
 
             </ul>

@@ -1,7 +1,8 @@
-import { Building2, CircleCheck, CircleX, PersonStanding } from "lucide-react"
+import { Building2, CircleCheck, CircleSmall, CircleX, PersonStanding } from "lucide-react"
 import { TooltipPadrao } from "./tooltip"
 
 type SheetInfoProps = {
+  total: number,
   success: number,
   error: number,
   pf: number,
@@ -12,6 +13,11 @@ type SheetInfoProps = {
 export function SheetInfo({ ...prop }: SheetInfoProps) {
   return (
     <div className="flex items-center gap-4">
+      <TooltipPadrao message={`Total de linhas`}>
+        <span className="flex items-center gap-2 font-semibold">
+          <CircleSmall size={16} />{prop.total}
+        </span>
+      </TooltipPadrao>
       <TooltipPadrao message={`Linhas processadas`}>
         <span className="flex items-center gap-2 font-semibold">
           <CircleCheck size={16} color="green" />{prop.success}
