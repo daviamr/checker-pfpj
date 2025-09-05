@@ -1,12 +1,14 @@
 import { LogOutIcon } from "lucide-react"
 import { useView } from "../../contexts/use-view"
 import { Button } from "../ui/button"
+import { useViewSheet } from "@/contexts/sheet-context"
 
 export function Header() {
   const { view, changeView } = useView()
+  const { changeViewSheet } = useViewSheet()
   return (
     <>
-      <header className="p-4 border-b">
+      <header className="p-4 border-b bg-accent">
         <div className="container m-auto flex items-center justify-between">
 
           <img src="/" alt="Logo" />
@@ -53,7 +55,10 @@ export function Header() {
 
               <li>
                 <button
-                  onClick={() => changeView('checkerpage')}
+                  onClick={() => {
+                    changeView('checkerpage')
+                    changeViewSheet('default')
+                  }}
                   type="button"
                   className="group flex items-center gap-4 [perspective:1000px] cursor-pointer"
                 >

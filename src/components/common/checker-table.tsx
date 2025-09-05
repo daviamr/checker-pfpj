@@ -43,7 +43,7 @@ import { Label } from "../ui/label"
 const data: Payment[] = [
   {
     id: "m5gr84i9",
-    numero: "+55 (21) 988776-65544",
+    numero: "(21) 988776-65544",
     operadora: "Claro",
     pfpj: "PF",
     documento: "123.456.789-00",
@@ -52,11 +52,13 @@ const data: Payment[] = [
     porte: 'EI',
     cnae: '1234567890',
     cidade: 'Mato Grosso',
-    uf: 'MT'
+    uf: 'MT',
+    cs: '',
+    socios: 'Socio 1, Socio 2',
   },
   {
     id: "m5gr84i10",
-    numero: "+55 (21) 988776-65544",
+    numero: "(21) 988776-65544",
     operadora: "Tim",
     pfpj: "PJ",
     documento: "91.081.895/0001-91",
@@ -65,11 +67,13 @@ const data: Payment[] = [
     porte: 'MEI',
     cnae: '1234567890',
     cidade: 'Rio de Janeiro',
-    uf: 'RJ'
+    uf: 'RJ',
+    cs: '',
+    socios: 'Socio 3, Socio 4',
   },
   {
     id: "m5gr84i11",
-    numero: "+55 (21) 988776-65544",
+    numero: "(21) 988776-65544",
     operadora: "Vivo",
     pfpj: "PJ",
     documento: "82.332.230/0001-12",
@@ -78,7 +82,9 @@ const data: Payment[] = [
     porte: 'LTDA',
     cnae: '1234567890',
     cidade: 'São Paulo',
-    uf: 'SP'
+    uf: 'SP',
+    cs: '',
+    socios: 'Socio 5, Socio 6',
   }
 ]
 
@@ -94,6 +100,8 @@ export type Payment = {
   cnae: string
   cidade: string
   uf: string
+  cs: string
+  socios: string
 }
 
 export function CheckerTable() {
@@ -105,7 +113,6 @@ export function CheckerTable() {
   const [isLoading, setIsLoading] = React.useState(false)
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
   const [hasSelectedRows, setHasSelectedRows] = React.useState(false)
-  // const [showField, setShowField] = React.useState<string>('Todos')
   const [showFilter, setShowFilter] = React.useState<string[]>(['pfpj'])
   const [showFilters, setShowFilters] = React.useState(false)
   const { exportDefaultSheet } = useSheetController()
@@ -114,11 +121,9 @@ export function CheckerTable() {
 
     try {
       await navigator.clipboard.writeText(formattedText);
-      // Aqui você pode adicionar uma notificação de sucesso se quiser
       console.log('Dados copiados com sucesso!');
     } catch (err) {
       console.error('Erro ao copiar dados:', err);
-      // Fallback para navegadores mais antigos
       const textArea = document.createElement('textarea');
       textArea.value = formattedText;
       document.body.appendChild(textArea);
@@ -127,14 +132,6 @@ export function CheckerTable() {
       document.body.removeChild(textArea);
     }
   };
-
-  // const filteredData = React.useMemo(() => {
-  //   if (showField === 'Todos') {
-  //     return data
-  //   }
-  //   const filteredData = data.filter(item => item.operadora === showField)
-  //   return filteredData
-  // }, [showField])
 
   const columns: ColumnDef<Payment>[] = [
     {
@@ -228,6 +225,18 @@ export function CheckerTable() {
       header: "UF",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("uf")}</div>),
       size: 40,
+    },
+    {
+      accessorKey: "cs",
+      header: "CS",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("cs")}</div>),
+      size: 40,
+    },
+    {
+      accessorKey: "socios",
+      header: "Socios",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("socios")}</div>),
+      size: 130,
     },
     {
       accessorKey: "utils",

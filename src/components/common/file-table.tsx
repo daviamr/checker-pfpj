@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CheckCircle, ChevronsLeft, ChevronsRight, CircleX, Download, Eye, Loader, Search, Trash } from "lucide-react"
+import { CheckCircle, ChevronsLeft, ChevronsRight, CircleX, Download, Eye, Loader, RefreshCcw, Search, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -140,8 +140,13 @@ export function FileTable() {
       header: "Status",
       cell: ({ row }) => (<div className="capitalize flex items-center gap-2">
         {row.getValue("status") === 'success' && <span><TooltipPadrao message="Processado com sucesso"><CheckCircle size={16} className="text-green-500" /></TooltipPadrao></span>}
-        {row.getValue("status") === 'pending' && <span><TooltipPadrao message="Erro ao processar"><CircleX size={16} className="text-red-500" /></TooltipPadrao></span>}
-        {row.getValue("status") === 'error' && <span><TooltipPadrao message="Processando"><Loader size={16} className="animate-spin" /></TooltipPadrao></span>}
+        {row.getValue("status") === 'pending' &&
+          <span>
+            <TooltipPadrao message="Erro ao processar">
+              <CircleX size={16} className="text-red-500" />
+            </TooltipPadrao>
+          </span>}
+        {row.getValue("status") === 'error' && <span className="flex gap-2"><TooltipPadrao message="Processando"><Loader size={16} className="animate-spin" /></TooltipPadrao><span className="text-xs animate-pulse">94%</span></span>}
       </div>),
       size: 80,
     },
@@ -165,7 +170,7 @@ export function FileTable() {
     },
     {
       accessorKey: "pf",
-      header: "PF",
+      header: "PF/SR",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pf")}</div>),
       size: 80,
     },
@@ -186,6 +191,18 @@ export function FileTable() {
       header: "",
       cell: ({ row }) => (<div className="capitalize flex justify-end gap-2">
         { }
+        {
+          row.getValue("status") === 'pending' && (
+            <TooltipPadrao message="Reprocessar linhas com erro">
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => changeViewSheet(row.original.nomeArquivo)}>
+                <RefreshCcw />
+                {row.getValue("select")}</Button>
+            </TooltipPadrao>
+          )
+        }
         <TooltipPadrao message="Visualizar resultado">
           <Button
             variant={"outline"}
@@ -261,7 +278,7 @@ export function FileTable() {
   }, [maxRows, table]);
 
   return viewSheet === 'default' ? (
-    <div className=" w-full">
+    <div className="w-full">
       <div className="relative flex items-center py-4">
         <Search size={16} className="absolute left-2" />
         <div className="flex items-center gap-4 w-full max-w-xs">
@@ -289,7 +306,7 @@ export function FileTable() {
           </TooltipPadrao> */}
         </div>
       </div>
-      <div className="rounded-md border relative">
+      <div className="rounded-md border relative overflow-x-auto max-w-full">
         <div className="absolute right-2 top-[2px] z-10">
           <Select value={maxRows.toString()} onValueChange={(value) => setMaxRows(Number(value))}>
             <SelectTrigger className="font-bold border-none">{maxRows}</SelectTrigger>

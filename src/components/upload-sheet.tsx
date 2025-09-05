@@ -27,24 +27,9 @@ export function UploadSheet() {
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, itaque repudiandae facere iste ut molestiae est!
             </DialogDescription>
           </DialogHeader>
-          <div>
+          <div className="py-4">
             <Label htmlFor="sheet" className="mb-2"><FileUp size={14} />Selecione a planilha</Label>
             <Input id="sheet" type="file" />
-          </div>
-
-          <div className="grid">
-            <div className="flex gap-4">
-              <Input id="forName" type="checkbox" className="max-w-4" />
-              <Label htmlFor="forName">Filtrar por nome</Label>
-            </div>
-            <div className="flex gap-4">
-              <Input id="forDocument" type="checkbox" className="max-w-4" />
-              <Label htmlFor="forDocument">Filtrar por nome</Label>
-            </div>
-            <div className="flex gap-4">
-              <Input id="forNumber" type="checkbox" className="max-w-4" />
-              <Label htmlFor="forNumber">Filtrar por nome</Label>
-            </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>

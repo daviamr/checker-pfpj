@@ -1,4 +1,4 @@
-import { AtSign, Calendar, Sheet } from "lucide-react"
+import { AtSign, Calendar, Coins, Sheet } from "lucide-react"
 import {
   Table,
   TableBody,
@@ -13,6 +13,7 @@ export function HistoricTable() {
     { label: 'Planilha', icon: <Sheet size={16} /> },
     { label: 'Usuário', icon: <AtSign size={16} /> },
     { label: 'Criação', icon: <Calendar size={16} /> },
+    { label: 'Crédito', icon: <Coins size={16} /> },
   ]
 
   return (
@@ -35,6 +36,7 @@ export function HistoricTable() {
               <TableCell>planilha-tal.xlsx</TableCell>
               <TableCell>Admin</TableCell>
               <TableCell>15/02/2025 12:00</TableCell>
+              <TableCell>R$ 1,20</TableCell>
             </TableRow>
           ))}
         </TableBody>
