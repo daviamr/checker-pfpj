@@ -23,21 +23,21 @@ export function SheetInfo({ ...prop }: SheetInfoProps) {
           <CircleCheck size={16} color="green" />{prop.success}
         </span>
       </TooltipPadrao>
-      <TooltipPadrao message={`Linhas com erro`}>
+      <TooltipPadrao message={`Erro no processamento`}>
         <span className="flex items-center gap-2 font-semibold">
           <CircleX size={16} color="red" />{prop.error}
         </span>
       </TooltipPadrao>
       <span className="border-r-2 select-none h-6"></span>
       <div className="flex items-center gap-4 rounded-lg">
-        <TooltipPadrao message={`PF - Pessoa Física`}>
-          <span className="flex items-center gap-2 font-semibold">
-            <PersonStanding size={16} />{prop.pf}
-          </span>
-        </TooltipPadrao>
-        <TooltipPadrao message={`PJ - Pessoa Jurídica`}>
+        <TooltipPadrao message={`Pessoa jurídica`}>
           <span className="flex items-center gap-2 font-semibold">
             <Building2 size={16} />{prop.pj}
+          </span>
+        </TooltipPadrao>
+        <TooltipPadrao message={`Pessoa física ou sem registro`}>
+          <span className="flex items-center gap-2 font-semibold">
+            <PersonStanding size={16} />{prop.pf}
           </span>
         </TooltipPadrao>
         {/* <TooltipPadrao message={`NI - Natureza jurídica não identificada`}>

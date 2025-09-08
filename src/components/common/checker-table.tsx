@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { ChevronsLeft, ChevronsRight, Copy, Download, Eye, Filter, Loader, Search, Trash } from "lucide-react"
+import { CheckCircle, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, CircleX, Copy, Download, Filter, Loader, RefreshCcw, Search, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
@@ -39,60 +39,69 @@ import { SheetInfo } from "../sheetIconsInfo"
 import { TooltipPadrao } from "../tooltip"
 import { useSheetController } from "@/pages/Checker/sheet-controller"
 import { Label } from "../ui/label"
+import { CompanyInfo } from "../company-info"
 
 const data: Payment[] = [
   {
     id: "m5gr84i9",
     numero: "(21) 988776-65544",
+    anatel: 'Válido',
+    status: 'success',
     operadora: "Claro",
-    pfpj: "PF",
+    pj: "Não",
     documento: "123.456.789-00",
     dataHoraConsulta: '25/10/2398, 18:09h',
-    razaoSocial: 'N/I',
+    razaoSocial: 'S/R',
     porte: 'EI',
     cnae: '1234567890',
-    cidade: 'Mato Grosso',
+    cidade: 'Mato Grosso, MT',
     uf: 'MT',
-    cs: '',
-    socios: 'Socio 1, Socio 2',
+    cs: '1234',
+    socios: '1',
   },
   {
     id: "m5gr84i10",
     numero: "(21) 988776-65544",
+    anatel: 'Válido',
+    status: 'success',
     operadora: "Tim",
-    pfpj: "PJ",
+    pj: "Sim",
     documento: "91.081.895/0001-91",
     dataHoraConsulta: '12/12/3498, 13:39h',
     razaoSocial: 'Empresa MEI',
     porte: 'MEI',
     cnae: '1234567890',
-    cidade: 'Rio de Janeiro',
+    cidade: 'Rio de Janeiro, RJ',
     uf: 'RJ',
-    cs: '',
-    socios: 'Socio 3, Socio 4',
+    cs: '5678',
+    socios: '3',
   },
   {
     id: "m5gr84i11",
     numero: "(21) 988776-65544",
+    anatel: 'Inválido',
+    status: 'error',
     operadora: "Vivo",
-    pfpj: "PJ",
+    pj: "Sim",
     documento: "82.332.230/0001-12",
     dataHoraConsulta: '01/07/9888, 12:18h',
     razaoSocial: 'Empresa LTDA',
     porte: 'LTDA',
     cnae: '1234567890',
-    cidade: 'São Paulo',
+    cidade: 'São Paulo, SP',
     uf: 'SP',
-    cs: '',
-    socios: 'Socio 5, Socio 6',
+    cs: '9012',
+    socios: '5',
   }
 ]
 
 export type Payment = {
   id: string
   numero: string
+  anatel: string
+  status: string
   operadora: string
-  pfpj: string
+  pj: string
   documento: string
   dataHoraConsulta: string
   razaoSocial: string
@@ -113,11 +122,11 @@ export function CheckerTable() {
   const [isLoading, setIsLoading] = React.useState(false)
   const [selectedIds, setSelectedIds] = React.useState<string[]>([])
   const [hasSelectedRows, setHasSelectedRows] = React.useState(false)
-  const [showFilter, setShowFilter] = React.useState<string[]>(['pfpj'])
+  const [showFilter, setShowFilter] = React.useState<string[]>(['pj'])
   const [showFilters, setShowFilters] = React.useState(false)
   const { exportDefaultSheet } = useSheetController()
   const copyFormattedData = async (rowData: Payment) => {
-    const formattedText = `Número: ${rowData.numero} | Operadora: ${rowData.operadora} | PF/PJ: ${rowData.pfpj} | Data de Consulta: ${rowData.dataHoraConsulta}`
+    const formattedText = `Número: ${rowData.numero} | Operadora: ${rowData.operadora} | PF/PJ: ${rowData.pj} | Data de Consulta: ${rowData.dataHoraConsulta}`
 
     try {
       await navigator.clipboard.writeText(formattedText);
@@ -171,16 +180,37 @@ export function CheckerTable() {
       size: 180,
     },
     {
+      accessorKey: "anatel",
+      header: "Anatel",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("anatel")}</div>),
+      size: 100,
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (<div className="capitalize flex items-center gap-2">
+        {row.getValue("status") === 'success' && <span><TooltipPadrao message="Processado com sucesso"><CheckCircle size={16} className="text-green-500" /></TooltipPadrao></span>}
+        {row.getValue("status") === 'error' &&
+          <span>
+            <TooltipPadrao message="Erro ao processar">
+              <CircleX size={16} className="text-red-500" />
+            </TooltipPadrao>
+          </span>}
+        {row.getValue("status") === 'pending' && <span className="flex gap-2"><TooltipPadrao message="Processando"><Loader size={16} className="animate-spin" /></TooltipPadrao><span className="text-xs animate-pulse">94%</span></span>}
+      </div>),
+      size: 80,
+    },
+    {
+      accessorKey: "pj",
+      header: "PJ",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
+      size: 80,
+    },
+    {
       accessorKey: "operadora",
       header: "Operadora",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("operadora")}</div>),
       size: 100,
-    },
-    {
-      accessorKey: "pfpj",
-      header: "PF/PJ",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("pfpj")}</div>),
-      size: 80,
     },
     {
       accessorKey: "documento",
@@ -191,11 +221,6 @@ export function CheckerTable() {
       accessorKey: "razaoSocial",
       header: "Razão Social",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("razaoSocial")}</div>),
-    },
-    {
-      accessorKey: "dataHoraConsulta",
-      header: "Data Consulta",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
     },
     {
       accessorKey: "porte",
@@ -221,12 +246,6 @@ export function CheckerTable() {
       size: 120,
     },
     {
-      accessorKey: "uf",
-      header: "UF",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("uf")}</div>),
-      size: 40,
-    },
-    {
       accessorKey: "cs",
       header: "CS",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("cs")}</div>),
@@ -236,20 +255,39 @@ export function CheckerTable() {
       accessorKey: "socios",
       header: "Socios",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("socios")}</div>),
-      size: 130,
+      size: 60,
+    },
+    {
+      accessorKey: "dataHoraConsulta",
+      header: "Data Consulta",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
     },
     {
       accessorKey: "utils",
       header: "",
       cell: ({ row }) => (<div className="capitalize flex justify-end gap-2">
         { }
-        <TooltipPadrao message="Ver informações">
+        <TooltipPadrao message="Reprocessar linha">
           <Button
             variant={"outline"}
             size={"icon"}>
-            <Eye />
+            <RefreshCcw />
             {row.getValue("select")}</Button>
         </TooltipPadrao>
+        <CompanyInfo
+          numero={row.getValue("numero")}
+          anatel={row.getValue("anatel")}
+          status={row.getValue("status")}
+          pj={row.getValue("pj")}
+          operadora={row.getValue("operadora")}
+          documento={row.getValue("documento")}
+          razaoSocial={row.getValue("razaoSocial")}
+          porte={row.getValue("porte")}
+          cnae={row.getValue("cnae")}
+          cidade={row.getValue("cidade")}
+          cs={row.getValue("cs")}
+          socios={row.getValue("socios")}
+          data={row.getValue("dataHoraConsulta")}/>
         <TooltipPadrao message="Copiar dados">
           <Button
             variant={"outline"}
@@ -313,7 +351,7 @@ export function CheckerTable() {
   console.log(showFilter)
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full max-w-[1536px]">
       <div className="relative flex items-center py-4">
         <Search size={16} className="absolute left-2" />
         <div className="flex items-center gap-4 w-full">
@@ -328,7 +366,7 @@ export function CheckerTable() {
               placeholder="Filtrar por Documento"
               value={(table.getColumn("documento")?.getFilterValue() as string) ?? ""}
               onChange={(event) => table.getColumn("documento")?.setFilterValue(event.target.value)}
-              />
+            />
           )}
 
           <Button variant={"outline"} size={"icon"} onClick={() => setShowFilters(prev => !prev)}>
@@ -348,6 +386,40 @@ export function CheckerTable() {
               <Button variant={"outline"} className={`hidden ${hasSelectedRows && 'flex'}`}
                 onClick={() => { console.log(selectedIds) }}><Download size={16} /> Seleção</Button>
             </TooltipPadrao>
+          </div>
+          <div className="flex items-center justify-end space-x-2">
+            <span className="text-sm pl-2">
+              Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}>
+                <ChevronsLeft />
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}>
+                <ChevronLeft />
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}>
+                <ChevronRight />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}>
+                <ChevronsRight />
+              </Button>
+            </div>
           </div>
           <UploadSheet />
           <TooltipPadrao message="Download Total">
@@ -418,11 +490,10 @@ export function CheckerTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} linha(s) selecionadas.
-        </div>
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <span className="text-sm text-gray-600 pl-2">
+          Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
+        </span>
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
@@ -435,18 +506,14 @@ export function CheckerTable() {
             variant="outline"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}>
-            Anterior
+            <ChevronLeft />
           </Button>
-
-          <span className="text-sm text-gray-600">
-            Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
-          </span>
 
           <Button
             variant="outline"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}>
-            Próximo
+            <ChevronRight />
           </Button>
           <Button
             variant="outline"
@@ -466,7 +533,7 @@ export function CheckerTable() {
             <div
               className="bg-background p-6 rounded-lg shadow-lg w-100"
               onClick={(e) => e.stopPropagation()}
-              >
+            >
               <p className="text-2xl pb-4 border-b">Selecione os filtros</p>
               <div className="flex items-center gap-2 text-white py-4">
                 <Input

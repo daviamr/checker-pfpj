@@ -11,7 +11,7 @@ export function Header() {
       <header className="p-4 border-b bg-accent">
         <div className="container m-auto flex items-center justify-between">
 
-          <img src="/" alt="Logo" />
+          <img src="src/lib/logo.png" alt="Logo" className="w-full max-w-32"/>
 
           <nav>
             <ul className="flex gap-4">

@@ -131,9 +131,10 @@ export function FileTable() {
       cell: ({ row }) => (<div className="capitalize">{row.getValue("nomeArquivo")}</div>),
     },
     {
-      accessorKey: "dataUpload",
-      header: "Data Upload",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("dataUpload")}</div>),
+      accessorKey: "totalLinhas",
+      header: "Total",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("totalLinhas")}</div>),
+      size: 80,
     },
     {
       accessorKey: "status",
@@ -151,10 +152,10 @@ export function FileTable() {
       size: 80,
     },
     {
-      accessorKey: "totalLinhas",
-      header: "Total",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("totalLinhas")}</div>),
-      size: 80,
+      accessorKey: "linhasComErro",
+      header: "Inválidas",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasComErro")}</div>),
+      size: 100,
     },
     {
       accessorKey: "linhasProcessadas",
@@ -163,10 +164,10 @@ export function FileTable() {
       size: 100,
     },
     {
-      accessorKey: "linhasComErro",
-      header: "Inválidas",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasComErro")}</div>),
-      size: 100,
+      accessorKey: "pj",
+      header: "PJ",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
+      size: 80,
     },
     {
       accessorKey: "pf",
@@ -175,16 +176,9 @@ export function FileTable() {
       size: 80,
     },
     {
-      accessorKey: "ni",
-      header: "NI",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("ni")}</div>),
-      size: 80,
-    },
-    {
-      accessorKey: "pj",
-      header: "PJ",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
-      size: 80,
+      accessorKey: "dataUpload",
+      header: "Data Upload",
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("dataUpload")}</div>),
     },
     {
       accessorKey: "utils",
@@ -223,9 +217,7 @@ export function FileTable() {
             size={'icon'}>
             <Trash size={16} /></Button>
         </TooltipPadrao>
-        <TooltipPadrao message="Compartilhar">
-          <ShareWorkSheet />
-        </TooltipPadrao>
+        <ShareWorkSheet />
         {/* {row.getIsSelected() && (
           <Button
             variant={"outline"}
@@ -278,7 +270,7 @@ export function FileTable() {
   }, [maxRows, table]);
 
   return viewSheet === 'default' ? (
-    <div className="w-full">
+    <div className="w-full max-w-[1536px]">
       <div className="relative flex items-center py-4">
         <Search size={16} className="absolute left-2" />
         <div className="flex items-center gap-4 w-full max-w-xs">
@@ -389,7 +381,7 @@ export function FileTable() {
             Anterior
           </Button>
 
-          <span className="text-sm text-gray-600">
+          <span className="text-sm">
             Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
           </span>
 
