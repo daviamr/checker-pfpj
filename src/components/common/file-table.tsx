@@ -316,7 +316,7 @@ export function FileTable() {
   }, [maxRows, table]);
 
   return viewSheet === 'default' ? (
-    <div className="w-full max-w-[1536px]">
+    <div className="w-full max-w-[1536px] overflow-auto">
       <div className="relative flex items-center py-4">
         <Search size={16} className="absolute left-2" />
         <div className="flex items-center gap-4 w-full max-w-xs">
