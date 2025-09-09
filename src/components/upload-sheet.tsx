@@ -9,11 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { CheckCircle, FileUp } from "lucide-react"
+import { CheckCircle, FileDown, FileUp } from "lucide-react"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { useSheetController } from "@/pages/Checker/sheet-controller"
 
 export function UploadSheet() {
+  const { exportDefaultSheet } = useSheetController()
   return (
     <Dialog>
       <form>
@@ -32,6 +34,8 @@ export function UploadSheet() {
             <Input id="sheet" type="file" />
           </div>
           <DialogFooter>
+            <Button variant={"secondary"} className="ml-4"
+            onClick={exportDefaultSheet}><FileDown size={16} /> Planilha exemplo</Button>
             <DialogClose asChild>
               <Button variant="outline">Cancelar</Button>
             </DialogClose>

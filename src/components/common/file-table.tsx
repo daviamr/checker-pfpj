@@ -49,6 +49,7 @@ const data: Payment[] = [
     status: 'success',
     totalLinhas: '938',
     linhasProcessadas: '877',
+    erros: '1',
     linhasComErro: '61',
     pf: '594',
     ni: '188',
@@ -61,6 +62,7 @@ const data: Payment[] = [
     status: 'pending',
     totalLinhas: '456',
     linhasProcessadas: '355',
+    erros: '1',
     linhasComErro: '101',
     pf: '200',
     ni: '23',
@@ -73,6 +75,7 @@ const data: Payment[] = [
     status: 'error',
     totalLinhas: '1983',
     linhasProcessadas: '1377',
+    erros: '1',
     linhasComErro: '606',
     pf: '100',
     ni: '59',
@@ -87,6 +90,7 @@ export type Payment = {
   status: string
   totalLinhas: string
   linhasProcessadas: string
+  erros: string
   linhasComErro: string
   pf: string
   ni: string
@@ -127,18 +131,30 @@ export function FileTable() {
     },
     {
       accessorKey: "nomeArquivo",
-      header: "Nome do Arquivo",
+      header: () => (
+        <TooltipPadrao message="Nome do arquivo CSV importado">
+          <span>Nome do Arquivo</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("nomeArquivo")}</div>),
     },
     {
       accessorKey: "totalLinhas",
-      header: "Total",
+      header: () => (
+        <TooltipPadrao message="Número total de linhas/registros no arquivo">
+          <span>Total</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("totalLinhas")}</div>),
       size: 80,
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: () => (
+        <TooltipPadrao message="Status atual do processamento do arquivo">
+          <span>Status</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize flex items-center gap-2">
         {row.getValue("status") === 'success' && <span><TooltipPadrao message="Processado com sucesso"><CheckCircle size={16} className="text-green-500" /></TooltipPadrao></span>}
         {row.getValue("status") === 'pending' &&
@@ -153,31 +169,61 @@ export function FileTable() {
     },
     {
       accessorKey: "linhasComErro",
-      header: "Inválidas",
+      header: () => (
+        <TooltipPadrao message="Quantidade de linhas que contêm dados inválidos ou incorretos">
+          <span>Inválidas</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasComErro")}</div>),
       size: 100,
     },
     {
       accessorKey: "linhasProcessadas",
-      header: "Processadas",
+      header: () => (
+        <TooltipPadrao message="Número de linhas que foram processadas com sucesso">
+          <span>Processadas</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("linhasProcessadas")}</div>),
       size: 100,
     },
     {
+      accessorKey: "erros",
+      header: () => (
+        <TooltipPadrao message="Quantidade total de erros encontrados durante o processamento">
+          <span>Erros</span>
+        </TooltipPadrao>
+      ),
+      cell: ({ row }) => (<div className="capitalize">{row.getValue("erros")}</div>),
+      size: 100,
+    },
+    {
       accessorKey: "pj",
-      header: "PJ",
+      header: () => (
+        <TooltipPadrao message="Quantidade de registros de Pessoa Jurídica identificados">
+          <span>PJ</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
       size: 80,
     },
     {
       accessorKey: "pf",
-      header: "PF/SR",
+      header: () => (
+        <TooltipPadrao message="Quantidade de registros de Pessoa Física/Sócio identificados">
+          <span>PF/SR</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pf")}</div>),
       size: 80,
     },
     {
       accessorKey: "dataUpload",
-      header: "Data Upload",
+      header: () => (
+        <TooltipPadrao message="Data e hora em que o arquivo foi enviado/importado">
+          <span>Data Upload</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("dataUpload")}</div>),
     },
     {

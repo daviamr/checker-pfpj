@@ -49,14 +49,14 @@ const data: Payment[] = [
     status: 'success',
     operadora: "Claro",
     pj: "Não",
-    documento: "123.456.789-00",
+    documento: "-",
     dataHoraConsulta: '25/10/2398, 18:09h',
-    razaoSocial: 'S/R',
+    razaoSocial: '-',
     porte: 'EI',
     cnae: '1234567890',
     cidade: 'Mato Grosso, MT',
     uf: 'MT',
-    cs: '1234',
+    cs: '12',
     socios: '1',
   },
   {
@@ -73,7 +73,7 @@ const data: Payment[] = [
     cnae: '1234567890',
     cidade: 'Rio de Janeiro, RJ',
     uf: 'RJ',
-    cs: '5678',
+    cs: '23',
     socios: '3',
   },
   {
@@ -90,7 +90,7 @@ const data: Payment[] = [
     cnae: '1234567890',
     cidade: 'São Paulo, SP',
     uf: 'SP',
-    cs: '9012',
+    cs: '34',
     socios: '5',
   }
 ]
@@ -125,6 +125,10 @@ export function CheckerTable() {
   const [showFilter, setShowFilter] = React.useState<string[]>(['pj'])
   const [showFilters, setShowFilters] = React.useState(false)
   const { exportDefaultSheet } = useSheetController()
+  const limitator = (element: string) => {
+    return element.length > 12 ? element.slice(0, 12) + "..." : element
+  }
+
   const copyFormattedData = async (rowData: Payment) => {
     const formattedText = `Número: ${rowData.numero} | Operadora: ${rowData.operadora} | PF/PJ: ${rowData.pj} | Data de Consulta: ${rowData.dataHoraConsulta}`
 
@@ -172,12 +176,16 @@ export function CheckerTable() {
             {isSelected ? (
               <Input type="number" className="w-40" />
             ) : (
-              <p>{row.getValue("numero")}</p>
+              <>
+                <TooltipPadrao message={row.getValue("numero")}>
+                  <p>{limitator(row.getValue("numero"))}</p>
+                </TooltipPadrao>
+              </>
             )}
           </div>
         )
       },
-      size: 180,
+      size: 120,
     },
     {
       accessorKey: "anatel",
@@ -207,15 +215,16 @@ export function CheckerTable() {
       size: 80,
     },
     {
-      accessorKey: "operadora",
-      header: "Operadora",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("operadora")}</div>),
-      size: 100,
-    },
-    {
       accessorKey: "documento",
       header: "Documento",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("documento")}</div>),
+      cell: ({ row }) => (
+        <>
+          <TooltipPadrao message={row.getValue("documento")}>
+            <p>{limitator(row.getValue("documento"))}</p>
+          </TooltipPadrao>
+        </>
+      ),
+      size: 120
     },
     {
       accessorKey: "razaoSocial",
@@ -242,18 +251,24 @@ export function CheckerTable() {
     {
       accessorKey: "cidade",
       header: "Cidade",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("cidade")}</div>),
+      cell: ({ row }) => (
+        <>
+          <TooltipPadrao message={row.getValue("cidade")}>
+            <p>{limitator(row.getValue("cidade"))}</p>
+          </TooltipPadrao>
+        </>
+      ),
       size: 120,
     },
     {
       accessorKey: "cs",
       header: "CS",
-      cell: ({ row }) => (<div className="capitalize">{row.getValue("cs")}</div>),
-      size: 40,
+      cell: ({ row }) => (<div className="capitalize">{parseFloat(row.getValue("cs")).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>),
+      size: 80,
     },
     {
       accessorKey: "socios",
-      header: "Socios",
+      header: "CSA",
       cell: ({ row }) => (<div className="capitalize">{row.getValue("socios")}</div>),
       size: 60,
     },
@@ -287,7 +302,7 @@ export function CheckerTable() {
           cidade={row.getValue("cidade")}
           cs={row.getValue("cs")}
           socios={row.getValue("socios")}
-          data={row.getValue("dataHoraConsulta")}/>
+          data={row.getValue("dataHoraConsulta")} />
         <TooltipPadrao message="Copiar dados">
           <Button
             variant={"outline"}
@@ -373,7 +388,7 @@ export function CheckerTable() {
             <Filter size={16} />
           </Button>
 
-          <SheetInfo total={102} success={92} error={10} pf={10} pj={22} unkpfpj={13} />
+          <SheetInfo total={102} invalid={49} success={92} error={10} pf={10} pj={22} unkpfpj={13} />
         </div>
 
         <div className="flex w-full justify-end">
