@@ -168,7 +168,11 @@ export function CheckerTable() {
     },
     {
       accessorKey: "numero",
-      header: "Número",
+      header: () => (
+        <TooltipPadrao message="Número de telefone ou identificação do registro">
+          <span>Número</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => {
         const isSelected = row.getIsSelected()
         return (
@@ -189,13 +193,21 @@ export function CheckerTable() {
     },
     {
       accessorKey: "anatel",
-      header: "Anatel",
+      header: () => (
+        <TooltipPadrao message="Código de homologação da Anatel para equipamentos de telecomunicações">
+          <span>Anatel</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("anatel")}</div>),
       size: 100,
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: () => (
+        <TooltipPadrao message="Status atual do processamento da consulta">
+          <span>Status</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize flex items-center gap-2">
         {row.getValue("status") === 'success' && <span><TooltipPadrao message="Processado com sucesso"><CheckCircle size={16} className="text-green-500" /></TooltipPadrao></span>}
         {row.getValue("status") === 'error' &&
@@ -210,13 +222,21 @@ export function CheckerTable() {
     },
     {
       accessorKey: "pj",
-      header: "PJ",
+      header: () => (
+        <TooltipPadrao message="Indicador se o registro pertence a uma Pessoa Jurídica">
+          <span>PJ</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("pj")}</div>),
       size: 80,
     },
     {
       accessorKey: "documento",
-      header: "Documento",
+      header: () => (
+        <TooltipPadrao message="Número do documento de identificação (CPF/CNPJ)">
+          <span>Documento</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (
         <>
           <TooltipPadrao message={row.getValue("documento")}>
@@ -228,18 +248,30 @@ export function CheckerTable() {
     },
     {
       accessorKey: "razaoSocial",
-      header: "Razão Social",
+      header: () => (
+        <TooltipPadrao message="Nome oficial da empresa conforme registro na Receita Federal">
+          <span>Razão Social</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("razaoSocial")}</div>),
     },
     {
       accessorKey: "porte",
-      header: "Porte",
+      header: () => (
+        <TooltipPadrao message="Classificação do porte da empresa (MEI, ME, EPP, Grande)">
+          <span>Porte</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("porte")}</div>),
       size: 100,
     },
     {
       accessorKey: "cnae",
-      header: "CNAE",
+      header: () => (
+        <TooltipPadrao message="Código Nacional de Atividade Econômica - principal atividade da empresa">
+          <span>CNAE</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (
         <>
           <TooltipPadrao message="Atividade tal tal tal">
@@ -250,7 +282,11 @@ export function CheckerTable() {
     },
     {
       accessorKey: "cidade",
-      header: "Cidade",
+      header: () => (
+        <TooltipPadrao message="Cidade onde a empresa está localizada">
+          <span>Cidade</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (
         <>
           <TooltipPadrao message={row.getValue("cidade")}>
@@ -262,19 +298,31 @@ export function CheckerTable() {
     },
     {
       accessorKey: "cs",
-      header: "CS",
+      header: () => (
+        <TooltipPadrao message="Capital Social da empresa em reais">
+          <span>CS</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{parseFloat(row.getValue("cs")).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>),
       size: 80,
     },
     {
       accessorKey: "socios",
-      header: "CSA",
+      header: () => (
+        <TooltipPadrao message="Capital Social Atual - valor atual do capital social">
+          <span>CSA</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("socios")}</div>),
       size: 60,
     },
     {
       accessorKey: "dataHoraConsulta",
-      header: "Data Consulta",
+      header: () => (
+        <TooltipPadrao message="Data e hora em que a consulta foi realizada">
+          <span>Data Consulta</span>
+        </TooltipPadrao>
+      ),
       cell: ({ row }) => (<div className="capitalize">{row.getValue("dataHoraConsulta")}</div>),
     },
     {
